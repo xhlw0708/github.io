@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta charset="UTF-8">
+  <meta 
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <meta 
+    http-equiv="X-UA-Compatible" 
+    content="ie=edge">
+  <meta 
+    name="theme-color" 
+    content="#fff" 
+    id="theme-color">
+  <meta 
+    name="description" 
+    content="Hexo">
+  <link 
+    rel="icon" 
+    href="/">
+  <title>Vue3实践</title>
+  
+    
+      <meta 
+        property="og:title" 
+        content="Vue3实践">
+    
+    
+      <meta 
+        property="og:url" 
+        content="http://example.com/2023/03/19/Vue3%E5%AE%9E%E8%B7%B5/index.html">
+    
+    
+      <meta 
+        property="og:img" 
+        content="https://img.songhn.com/img/Y67gdd.png">
+    
+    
+    
+      <meta 
+        property="og:type" 
+        content="article">
+      <meta 
+        property="og:article:published_time" 
+        content="2023-03-19">
+      <meta 
+        property="og:article:modified_time" 
+        content="2023-03-19">
+      <meta 
+        property="og:article:author" 
+        content="theme-kaze">
+      
+        
+      
+    
+  
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  <link rel="preload" href="/css/main.css" as="style" >
+  
+  
+  <link rel="stylesheet" href="/css/main.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+  
+  
+  
+    <link rel="stylesheet" href="/js/lib/lightbox/baguetteBox.min.css">
+  
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+    function loadCSS(href, data, attr) {
+      var sheet = document.createElement('link');
+      sheet.ref = 'stylesheet';
+      sheet.href = href;
+      sheet.dataset[data] = attr;
+      document.head.appendChild(sheet);
+    }
+    function changeCSS(cssFile, data, attr) {
+      var oldlink = document.querySelector(data);
+      var newlink = document.createElement("link");
+      newlink.setAttribute("rel", "stylesheet");
+      newlink.setAttribute("href", cssFile);
+      newlink.dataset.prism = attr;
+      document.head.replaceChild(newlink, oldlink);
+    }
+  </script>
+  
+    
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+  </script>
+  
+    <script>
+      var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+        document.getElementById('theme-color').dataset.mode = getCssMediaQuery();
+      }
+    };
+    setDarkmode();
+    </script>
+  
+  
+  
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.js" as="script">
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+  <body>
+    <div class="wrapper">
+       
+      <nav class="navbar">
+  <div class="navbar-logo">
+    <a class="navbar-logo-main" href="/">
+      
+      <span class="navbar-logo-dsc">Theme Kaze</span>
+      </a>
+  </div>
+  <div class="navbar-menu">
+    
+      <a 
+        href="/" 
+        class="navbar-menu-item">
+        
+          首页
+        
+      </a>
+    
+      <a 
+        href="/archives" 
+        class="navbar-menu-item">
+        
+          归档
+        
+      </a>
+    
+      <a 
+        href="/tags" 
+        class="navbar-menu-item">
+        
+          标签
+        
+      </a>
+    
+      <a 
+        href="/categories" 
+        class="navbar-menu-item">
+        
+          分类
+        
+      </a>
+    
+      <a 
+        href="/about" 
+        class="navbar-menu-item">
+        
+          关于
+        
+      </a>
+    
+      <a 
+        href="/links" 
+        class="navbar-menu-item">
+        
+          友链
+        
+      </a>
+    
+    <a 
+      class="navbar-menu-item darknavbar" 
+      id="dark">
+      <i class="iconfont icon-weather"></i>
+    </a>
+    <a 
+      class="navbar-menu-item searchnavbar" 
+      id="search">
+      <i 
+        class="iconfont icon-search" 
+        style="font-size: 1.2rem; font-weight: 400;">
+      </i>
+    </a>
+  </div>
+</nav> 
+      
+      <div 
+        id="local-search" 
+        style="display: none">
+        <input
+          class="navbar-menu-item"
+          id="search-input"
+          placeholder="请输入搜索内容..." />
+        <div id="search-content"></div>
+      </div>
+      
+      <div class="section-wrap">
+        <div class="container">
+          <div class="columns">
+            <div class="left-holder"></div>
+            <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      Vue3实践
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2023-03-19T08:09:37.268Z">
+      <i 
+        class="iconfont icon-calendar" 
+        style="margin-right: 2px;">
+      </i>
+      <span>2023-03-19</span>
+    </time>
+    
+    
+      <span class="dot"></span>
+      <span>2.3k 字</span>
+    
+  </div>
+  
+  </header>
+  <div 
+    id="section" 
+    class="post-content">
+    <p>最新版Vue3实践教程</p>
+<h3 id="一、创建项目"><a href="#一、创建项目" class="headerlink" title="一、创建项目"></a>一、创建项目</h3><pre class="highlight"><span class="line"><span class="meta prompt_"># </span><span class="language-bash">创建项目</span></span><br><span class="line">npm init vite-app &lt;projectname&gt;</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">或者</span></span><br><span class="line">yarn create vite my-vue --template vue</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装依赖</span></span><br><span class="line">yarn install</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">启动项目</span></span><br><span class="line">yarn dev</span><br></pre>
+
+<h3 id="二、Element-Plus"><a href="#二、Element-Plus" class="headerlink" title="二、Element-Plus"></a>二、Element-Plus</h3><p>yarn安装</p>
+<pre class="highlight"><span class="line">yarn add element-plus</span><br></pre>
+
+<p>在main.js中使用</p>
+<pre class="highlight"><span class="line"><span class="keyword">import</span> <span class="title class_">ElementPlus</span> <span class="keyword">from</span> <span class="string">&#x27;element-plus&#x27;</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">&#x27;element-plus/dist/index.css&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> app = <span class="title function_">createApp</span>(<span class="title class_">App</span>)</span><br><span class="line"></span><br><span class="line">app.<span class="title function_">use</span>(<span class="title class_">ElementPlus</span>)</span><br><span class="line">app.<span class="title function_">mount</span>(<span class="string">&#x27;#app&#x27;</span>)</span><br></pre>
+
+<h3 id="三、VueRouter"><a href="#三、VueRouter" class="headerlink" title="三、VueRouter"></a>三、VueRouter</h3><p>安装</p>
+<pre class="highlight"><span class="line">cnpm install vue-router@4</span><br></pre>
+
+<p>在src目录下创建router文件夹并新建index.js文件</p>
+<pre class="highlight"><span class="line"><span class="keyword">import</span> &#123;createRouter,createWebHashHistory&#125; <span class="keyword">from</span> <span class="string">&#x27;vue-router&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> routes = [</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">path</span>:<span class="string">&#x27;/&#x27;</span>,</span><br><span class="line">    <span class="attr">component</span>: <span class="function">() =&gt;</span> <span class="keyword">import</span>(<span class="string">&#x27;../views/Main.vue&#x27;</span>),</span><br><span class="line">    <span class="attr">children</span>:[</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="attr">path</span>:<span class="string">&#x27;home&#x27;</span>,</span><br><span class="line">        <span class="attr">name</span>:<span class="string">&#x27;Home&#x27;</span>,</span><br><span class="line">        <span class="attr">component</span>: <span class="function">() =&gt;</span> <span class="keyword">import</span>(<span class="string">&#x27;../views/home/Home.vue&#x27;</span>)</span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;,</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> router = <span class="title function_">createRouter</span>(&#123;</span><br><span class="line">  <span class="attr">history</span>:<span class="title function_">createWebHashHistory</span>(),</span><br><span class="line">  routes</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> router</span><br></pre>
+
+<p>在main.js中引入</p>
+<pre class="highlight"><span class="line"><span class="keyword">import</span> router <span class="keyword">from</span> <span class="string">&#x27;./router&#x27;</span> <span class="comment">//这里用的是ts 出现报红需要npm install --save-dev @types/js-md5</span></span><br><span class="line">app.<span class="title function_">use</span>(router)</span><br></pre>
+
+<p>使用</p>
+<pre class="highlight"><span class="line">&lt;!--模板语法中使用--&gt;</span><br><span class="line">&#123;&#123;$router.push(&#x27;/region&#x27;)&#125;&#125;</span><br><span class="line">&#123;&#123;$route.params.name&#125;&#125;</span><br><span class="line"></span><br><span class="line">&lt;!--js中使用--&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">//引入useRouter</span><br><span class="line">import &#123;useRouter,useRoute&#125; from &#x27;vue-router&#x27;</span><br><span class="line">export default &#123;</span><br><span class="line">    setup()&#123;</span><br><span class="line">        const router = useRouter()</span><br><span class="line">        const route = useRoute()</span><br><span class="line">        //编程式路由导航</span><br><span class="line">        //使用参数，要在router/index.js配置路由时参数占位</span><br><span class="line">        router.push(&#123;</span><br><span class="line">            name:&#x27;Region&#x27;,</span><br><span class="line">            params:&#123;</span><br><span class="line">                name:&#x27;张三&#x27;,</span><br><span class="line">                age:23</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre>
+
+<h3 id="四、vue3-图标的使用"><a href="#四、vue3-图标的使用" class="headerlink" title="四、vue3-图标的使用"></a>四、vue3-图标的使用</h3><p>引入参考官网</p>
+<p><a target="_blank" rel="noopener" href="https://element-plus.org/zh-CN/component/icon.html#%E4%BD%BF%E7%94%A8%E5%9B%BE%E6%A0%87">Icon 图标 | Element Plus (element-plus.org)</a></p>
+<p>使用</p>
+<pre class="highlight"><span class="line">&lt;!--动态使用 用el-icon外套无需设置样式--&gt;</span><br><span class="line">&lt;el-icon v-for=&quot;item in menuList&quot;&gt;</span><br><span class="line">    &lt;!--is属性 动态 代表图标--&gt;</span><br><span class="line">    &lt;component class=&quot;icons&quot; :is=&quot;item.icon&quot; /&gt;</span><br><span class="line">&lt;/el-icon&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">	const menuList = [</span><br><span class="line">        &#123;</span><br><span class="line">          path: &#x27;/&#x27;,</span><br><span class="line">          name: &#x27;home&#x27;,</span><br><span class="line">          label: &#x27;首页&#x27;,</span><br><span class="line">          //此处写的是icon的标签名称</span><br><span class="line">          icon: &#x27;House&#x27;,</span><br><span class="line">          url: &#x27;Home/Home&#x27;</span><br><span class="line">        &#125;</span><br><span class="line">   ]</span><br><span class="line">&lt;/script&gt;</span><br></pre>
+
+<h3 id="五、Vuex"><a href="#五、Vuex" class="headerlink" title="五、Vuex"></a>五、Vuex</h3><p>安装</p>
+<pre class="highlight"><span class="line">cnpm install vuex -S</span><br></pre>
+
+<p>在src目录下新建store文件并创建index.js</p>
+<pre class="highlight"><span class="line"><span class="keyword">import</span> &#123;createStore&#125; <span class="keyword">from</span> <span class="string">&#x27;vuex&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">createStore</span>(&#123;</span><br><span class="line">  <span class="attr">state</span>:&#123;</span><br><span class="line">    <span class="attr">isCollapse</span>:<span class="literal">true</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">actions</span>:&#123;</span><br><span class="line">    <span class="title function_">changeIsCollapse</span>(<span class="params">context,value</span>)&#123;</span><br><span class="line">        context.<span class="title function_">commit</span>(<span class="string">&#x27;CHANGEISCOLLAPSE&#x27;</span>,value)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">mutations</span>:&#123;</span><br><span class="line">    <span class="title function_">CHANGEISCOLLAPSE</span>(<span class="params">state,value</span>)&#123;</span><br><span class="line">      state.<span class="property">isCollapse</span> = !state.<span class="property">isCollapse</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">getters</span>:&#123;</span><br><span class="line">      <span class="title function_">handleCollapse</span>(<span class="params">state</span>)&#123;</span><br><span class="line">          <span class="comment">//处理state中数据</span></span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre>
+
+<p>在main.js中使用</p>
+<pre class="highlight"><span class="line"><span class="keyword">import</span> store <span class="keyword">from</span> <span class="string">&#x27;./store&#x27;</span></span><br><span class="line"></span><br><span class="line">app.<span class="title function_">use</span>(store)</span><br></pre>
+
+<p>使用</p>
+<pre class="highlight"><span class="line">&lt;!--模板语法使用--&gt;</span><br><span class="line">&#123;&#123;$store.state.isCollapse&#125;&#125;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">//js中使用</span><br><span class="line">//必须引入</span><br><span class="line">import &#123; useStore &#125; from &#x27;vuex&#x27;;</span><br><span class="line">    export default &#123;</span><br><span class="line">        setup() &#123;</span><br><span class="line">            //在这里使用useStore函数赋值给store</span><br><span class="line">            let store = useStore()</span><br><span class="line">            //改变侧边栏状态</span><br><span class="line">            let handleCollapse = () =&gt; &#123;</span><br><span class="line">                store.commit(&#x27;changeIsCollapse&#x27;,value)</span><br><span class="line">                store.commit(&#x27;CHANGEISCOLLAPSE&#x27;,value)</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            return &#123;</span><br><span class="line">                handleCollapse</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre>
+
+<h3 id="六、Mockjs"><a href="#六、Mockjs" class="headerlink" title="六、Mockjs"></a>六、Mockjs</h3><p>在线mock</p>
+<p>本地mock</p>
+<p>安装</p>
+<pre class="highlight"><span class="line">cnpm install mockjs -S</span><br></pre>
+
+<p>准备数据 – 在src目录下新建api文件夹再创建mockData目录</p>
+<p>新建home.js （准备数据）</p>
+<pre class="highlight"><span class="line"><span class="keyword">const</span> item = &#123;</span><br><span class="line">  <span class="attr">today</span>:<span class="string">&#x27;2022-11-20&#x27;</span>,</span><br><span class="line">    <span class="attr">todayAccess</span>:<span class="number">20</span>,</span><br><span class="line">    <span class="attr">monthAccess</span>:<span class="number">520</span>,</span><br><span class="line">    <span class="attr">totalAccess</span>:<span class="number">10086</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> tableData = <span class="title class_">Array</span>.<span class="title function_">from</span>(&#123;<span class="attr">length</span>:<span class="number">20</span>&#125;).<span class="title function_">fill</span>(item)</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  <span class="attr">getHomeData</span>: <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      <span class="attr">code</span>: <span class="number">200</span>,</span><br><span class="line">      <span class="attr">data</span>:&#123;</span><br><span class="line">          <span class="attr">tableData</span>: tableData</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre>
+
+<p>再在api文件夹创建mock.js</p>
+<pre class="highlight"><span class="line"><span class="keyword">import</span> <span class="title class_">Mock</span> <span class="keyword">from</span> <span class="string">&#x27;mockjs&#x27;</span></span><br><span class="line"><span class="keyword">import</span> homeApi <span class="keyword">from</span> <span class="string">&#x27;./mockData/home&#x27;</span></span><br><span class="line"><span class="comment">//拦截请求</span></span><br><span class="line"><span class="title class_">Mock</span>.<span class="title function_">mock</span>(<span class="string">&#x27;/home/getData&#x27;</span>,homeApi.<span class="property">getHomeData</span>)</span><br></pre>
+
+<p>测试 发送异步请求</p>
+<pre class="highlight"><span class="line"><span class="keyword">let</span> tableData = <span class="title function_">ref</span>([])</span><br><span class="line"><span class="keyword">const</span> <span class="title function_">getTableList</span> = <span class="keyword">async</span> (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">    <span class="keyword">await</span> axios.<span class="title function_">get</span>(<span class="string">&#x27;/home/getData&#x27;</span>).<span class="title function_">then</span>(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">if</span>(res.<span class="property">data</span>.<span class="property">code</span> === <span class="number">200</span>)&#123;</span><br><span class="line">            tableData.<span class="property">value</span> = res.<span class="property">data</span>.<span class="property">data</span>.<span class="property">tableData</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">onMounted</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="title function_">getTableList</span>()</span><br><span class="line">&#125;)</span><br></pre>
+
+<h3 id="七、vite跨域配置"><a href="#七、vite跨域配置" class="headerlink" title="七、vite跨域配置"></a>七、vite跨域配置</h3><p>在根目录下创建vite.config.js</p>
+<pre class="highlight"><span class="line"><span class="keyword">import</span> &#123;defineConfig&#125; <span class="keyword">from</span> <span class="string">&#x27;vite&#x27;</span></span><br><span class="line"><span class="keyword">import</span> vue <span class="keyword">from</span> <span class="string">&#x27;@vitejs/plugin-vue&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// https://vitejs.dev/config/</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineConfig</span>(&#123;</span><br><span class="line">    <span class="attr">server</span>: &#123;</span><br><span class="line">        <span class="attr">proxy</span>: &#123;</span><br><span class="line">            <span class="string">&#x27;/api&#x27;</span>: &#123;</span><br><span class="line">                <span class="attr">target</span>: <span class="string">&#x27;http://localhost:8081&#x27;</span>,</span><br><span class="line">                <span class="attr">changeOrigin</span>: <span class="literal">true</span>,  <span class="comment">// 允许跨域</span></span><br><span class="line">                <span class="attr">rewrite</span>: <span class="function"><span class="params">path</span> =&gt;</span> path.<span class="title function_">replace</span>(<span class="regexp">/^\/api/</span>, <span class="string">&#x27;&#x27;</span>)</span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="string">&#x27;/map&#x27;</span>: &#123;</span><br><span class="line">                <span class="attr">target</span>: <span class="string">`https://api.map.baidu.com/location/ip`</span>,</span><br><span class="line">                <span class="attr">changeOrigin</span>: <span class="literal">true</span>,  <span class="comment">// 允许跨域</span></span><br><span class="line">                <span class="attr">rewrite</span>: <span class="function"><span class="params">path</span> =&gt;</span> path.<span class="title function_">replace</span>(<span class="regexp">/^\/map/</span>, <span class="string">&#x27;&#x27;</span>)</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">plugins</span>: [</span><br><span class="line">        <span class="title function_">vue</span>(),</span><br><span class="line">    ],</span><br><span class="line">&#125;)</span><br><span class="line"></span><br></pre>
+
+<h3 id="八、二次封装axios"><a href="#八、二次封装axios" class="headerlink" title="八、二次封装axios"></a>八、二次封装axios</h3><p>在src目录下创建api文件夹并新建request.js</p>
+<pre class="highlight"><span class="line"><span class="keyword">import</span> axios <span class="keyword">from</span> <span class="string">&#x27;axios&#x27;</span></span><br><span class="line"><span class="comment">// import Router from &quot;vue-router&quot;;</span></span><br><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">ElMessage</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;element-plus&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> request = axios.<span class="title function_">create</span>(&#123;</span><br><span class="line">  <span class="comment">// baseURL: &#x27;/api&#x27;,  //设计到多个跨域路径，不写baseURL，那么在发送请求时就需要加上前缀了</span></span><br><span class="line">  <span class="attr">timeout</span>: <span class="number">10000</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// request 拦截器</span></span><br><span class="line"><span class="comment">// 可以自请求发送前对请求做一些处理</span></span><br><span class="line"><span class="comment">// 比如统一加token，对请求参数统一加密</span></span><br><span class="line"><span class="keyword">let</span> user = <span class="literal">null</span></span><br><span class="line">request.<span class="property">interceptors</span>.<span class="property">request</span>.<span class="title function_">use</span>(<span class="function"><span class="params">config</span> =&gt;</span> &#123;</span><br><span class="line">  config.<span class="property">headers</span>[<span class="string">&#x27;Content-Type&#x27;</span>] = <span class="string">&#x27;application/json;charset=utf-8&#x27;</span>;</span><br><span class="line">  user = <span class="variable language_">localStorage</span>.<span class="title function_">getItem</span>(<span class="string">&quot;user&quot;</span>) ? <span class="title class_">JSON</span>.<span class="title function_">parse</span>(<span class="variable language_">localStorage</span>.<span class="title function_">getItem</span>(<span class="string">&quot;user&quot;</span>)) : <span class="literal">null</span>;</span><br><span class="line">  <span class="keyword">if</span> (user) &#123;</span><br><span class="line">    config.<span class="property">headers</span>[<span class="string">&#x27;token&#x27;</span>] = user.<span class="property">token</span>;  <span class="comment">// 设置请求头</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> config</span><br><span class="line">&#125;, <span class="function"><span class="params">error</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="title class_">Promise</span>.<span class="title function_">reject</span>(error)</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// response 拦截器</span></span><br><span class="line"><span class="comment">// 可以在接口响应后统一处理结果</span></span><br><span class="line">request.<span class="property">interceptors</span>.<span class="property">response</span>.<span class="title function_">use</span>(</span><br><span class="line">  <span class="function"><span class="params">response</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> res = response.<span class="property">data</span>;</span><br><span class="line">    <span class="comment">// 如果是返回的文件</span></span><br><span class="line">    <span class="keyword">if</span> (response.<span class="property">config</span>.<span class="property">responseType</span> === <span class="string">&#x27;blob&#x27;</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> res</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 兼容服务端返回的字符串数据</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> res === <span class="string">&#x27;string&#x27;</span>) &#123;</span><br><span class="line">      res = res ? <span class="title class_">JSON</span>.<span class="title function_">parse</span>(res) : res</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (res.<span class="property">code</span> === <span class="number">0</span>) &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(res)</span><br><span class="line">      <span class="title class_">ElMessage</span>(&#123;</span><br><span class="line">        <span class="attr">message</span>: msg,</span><br><span class="line">        <span class="attr">type</span>: <span class="string">&#x27;error&#x27;</span>,</span><br><span class="line">      &#125;)</span><br><span class="line">      <span class="comment">// Router.push(&quot;/login&quot;)</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="function"><span class="params">error</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;err&#x27;</span> + error) <span class="comment">// for debug</span></span><br><span class="line">    <span class="keyword">return</span> <span class="title class_">Promise</span>.<span class="title function_">reject</span>(error)</span><br><span class="line">  &#125;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> request</span><br></pre>
+
+<p>在main.js文件中挂载到全局</p>
+<pre class="highlight"><span class="line"><span class="keyword">import</span> request <span class="keyword">from</span> <span class="string">&#x27;./api/request&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//挂载方式和vue2不同 使用app.config.globalProperties</span></span><br><span class="line">app.<span class="property">config</span>.<span class="property">globalProperties</span>.<span class="property">request</span> = request</span><br></pre>
+
+<p>使用</p>
+<pre class="highlight"><span class="line"><span class="comment">//因为vue3中没有this，换种方式获取当前的实例</span></span><br><span class="line"><span class="keyword">import</span> &#123;getCurrentInstance  &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//解构赋值获取实例</span></span><br><span class="line"><span class="keyword">const</span> &#123;proxy&#125; = <span class="title function_">getCurrentInstance</span>()</span><br><span class="line"><span class="comment">//发送请求</span></span><br><span class="line">proxy.<span class="property">request</span>.<span class="title function_">get</span>(<span class="string">&#x27;/api/university/selectByName&#x27;</span>,&#123;</span><br><span class="line">    <span class="attr">params</span>:&#123;</span><br><span class="line">        <span class="attr">name</span>:<span class="string">&#x27;乐山师范&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;).<span class="title function_">then</span>(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span>(res.<span class="property">code</span> === <span class="number">1</span>)&#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(res.<span class="property">data</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br><span class="line">&#125;)</span><br></pre>
+
+<h3 id="九、reactive直接赋值"><a href="#九、reactive直接赋值" class="headerlink" title="九、reactive直接赋值"></a>九、reactive直接赋值</h3><p>问题：在目前（2022-11-21），vue3没法直接给reactive修饰的对象数据直接进行赋值</p>
+<p>解决：</p>
+<pre class="highlight"><span class="line"><span class="comment">//给需要的对象数据在外面嵌套一层</span></span><br><span class="line">cosnt state = <span class="title function_">reactive</span>(&#123;</span><br><span class="line">    <span class="comment">//真正需要修改的数据</span></span><br><span class="line">    <span class="attr">formData</span>:&#123;</span><br><span class="line">        <span class="attr">id</span>:<span class="string">&#x27;01&#x27;</span>,</span><br><span class="line">        <span class="attr">name</span>:<span class="string">&#x27;zhangsan&#x27;</span>,</span><br><span class="line">        <span class="attr">age</span>:<span class="number">23</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">handleFormData</span> = (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">    <span class="comment">//直接对state中的formData进行修改</span></span><br><span class="line">    state.<span class="property">formData</span> = &#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//在setup中返回数据的时候，如果不想在视图中使用state.formDate.name  想sheng&#x27;lstate</span></span><br><span class="line"><span class="keyword">return</span> &#123;</span><br><span class="line">    <span class="comment">//使用toRefs 并且</span></span><br><span class="line">    ...<span class="title function_">toRefs</span>(state)</span><br><span class="line">&#125;</span><br></pre>
+
+<h3 id="十、模态框修改数据导致页面数据也会跟着修改"><a href="#十、模态框修改数据导致页面数据也会跟着修改" class="headerlink" title="十、模态框修改数据导致页面数据也会跟着修改"></a>十、模态框修改数据导致页面数据也会跟着修改</h3><pre class="highlight"><span class="line">state.<span class="property">formData</span> = row <span class="comment">//这种方式是浅拷贝，推荐下面的写法</span></span><br><span class="line">state.<span class="property">formData</span> = <span class="title class_">JSON</span>.<span class="title function_">parse</span>(<span class="title class_">JSON</span>.<span class="title function_">stringify</span>(row))</span><br></pre>
+
+<h3 id="十一、Pinia"><a href="#十一、Pinia" class="headerlink" title="十一、Pinia"></a>十一、Pinia</h3><p>安装</p>
+<pre class="highlight"><span class="line">npm install pinia</span><br></pre>
+
+<p>在main.js中引入</p>
+<pre class="highlight"><span class="line"><span class="keyword">import</span> &#123; createPinia &#125; <span class="keyword">from</span> <span class="string">&#x27;pinia&#x27;</span></span><br><span class="line"><span class="keyword">const</span> pinia = <span class="title function_">createPinia</span>()</span><br><span class="line"><span class="keyword">const</span> app = <span class="title function_">createApp</span>(<span class="title class_">App</span>)</span><br><span class="line">app.<span class="title function_">use</span>(pinia)</span><br></pre>
+
+<p>在src目录下创建store并新建index.js</p>
+<pre class="highlight"><span class="line"><span class="keyword">import</span> &#123; defineStore&#125; <span class="keyword">from</span> <span class="string">&#x27;pinia&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> useCounterStore  = <span class="title function_">defineStore</span>(<span class="string">&#x27;counter&#x27;</span>,&#123;</span><br><span class="line">  <span class="attr">state</span>:<span class="function">()=&gt;</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      <span class="attr">count</span>:<span class="number">0</span>,</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">getters</span>:&#123;</span><br><span class="line">      <span class="attr">double</span>:<span class="function">(<span class="params">state</span>) =&gt;</span> state.<span class="property">count</span> * <span class="number">2</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">actions</span>:&#123;</span><br><span class="line">    <span class="title function_">increment</span>(<span class="params"></span>)&#123;</span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">count</span> ++</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> useUserStore  = <span class="title function_">defineStore</span>(<span class="string">&#x27;user&#x27;</span>,&#123;</span><br><span class="line">  <span class="attr">state</span>:<span class="function">()=&gt;</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;	</span><br><span class="line">      <span class="attr">isMale</span>:<span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">getters</span>:&#123;&#125;,</span><br><span class="line">  <span class="attr">actions</span>:&#123;</span><br><span class="line">    <span class="title function_">changeSex</span>(<span class="params"></span>)&#123;</span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">isMale</span> = !<span class="variable language_">this</span>.<span class="property">isMale</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre>
+
+<p>使用</p>
+<pre class="highlight"><span class="line">&lt;script&gt;</span><br><span class="line">import &#123;useCounterStore,useUserStore &#125; from &#x27;../store&#x27;</span><br><span class="line">import &#123;storeToRefs &#125; from &#x27;pinia&#x27;</span><br><span class="line">export default &#123;</span><br><span class="line">  name:&#x27;Home&#x27;,</span><br><span class="line">  setup()&#123;</span><br><span class="line">    const countStore = useCounterStore()</span><br><span class="line">    const userStore = useUserStore()</span><br><span class="line">    //通过解构赋值 得到count并且将其设置为响应式的</span><br><span class="line">    // const &#123;count&#125; = storeToRefs(countStore)</span><br><span class="line"></span><br><span class="line">    const handleCount = () =&gt; &#123;</span><br><span class="line">        //直接修改state中的count</span><br><span class="line">      // countStore.count++</span><br><span class="line">      //调用actions中的increment函数</span><br><span class="line">      countStore.increment函数()</span><br><span class="line">      //通过$patch()里面传递函数来修改state中的count</span><br><span class="line">      countStore.$patch(state =&gt; &#123;</span><br><span class="line">          state.count ++</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">    const handleSex = () =&gt; &#123;</span><br><span class="line">      //调用actions中的changeSex函数</span><br><span class="line">      userStore.changeSex()</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    return &#123;</span><br><span class="line">      handleCount,countStore,userStore,handleSex</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre>
+
+<h3 id="十二、setup语法糖–基本"><a href="#十二、setup语法糖–基本" class="headerlink" title="十二、setup语法糖–基本"></a>十二、setup语法糖–基本</h3><h4 id="1-父传子传参–defineProps"><a href="#1-父传子传参–defineProps" class="headerlink" title="1.父传子传参–defineProps"></a>1.父传子传参–defineProps</h4><p>声明参数类型</p>
+<pre class="highlight"><span class="line">&lt;!--父组件--&gt;</span><br><span class="line">&lt;template&gt;</span><br><span class="line">	&lt;Child msg=&quot;子元素，你在干嘛&quot;&gt;&lt;/Child&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;!--子组件--&gt;</span><br><span class="line">&lt;template&gt;</span><br><span class="line">	我是子元素，这是父元素给我带的话&#123;&#123;props.msg&#125;&#125;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">import &#123;defineProps&#125; from &#x27;vue&#x27;</span><br><span class="line">// 在接收时候也得注意，vue3 props接收必须规定数据类型，如果父元素数据类型出错，那么会报错</span><br><span class="line">const props = defineProps(&#123;msg:String&#125;)</span><br><span class="line">&lt;/script&gt;</span><br></pre>
+
+<p>定义接口，规范格式</p>
+<pre class="highlight"><span class="line">&lt;!--父组件--&gt;</span><br><span class="line">&lt;template&gt;</span><br><span class="line">&lt;Child :msg=&quot;msg&quot; :count=&quot;count&quot; :user-list=&quot;userList&quot;/&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line">&lt;script setup lang=&quot;ts&quot;&gt;</span><br><span class="line">import &#123;ref&#125; from &quot;vue&quot;;</span><br><span class="line">import Child from &quot;./components/Child.vue&quot;;</span><br><span class="line"></span><br><span class="line">const msg = ref&lt;String&gt;(&#x27;帅&#x27;)</span><br><span class="line">const count = ref&lt;Number&gt;(9527)</span><br><span class="line">const userList = ref([</span><br><span class="line">  &#123;name: &#x27;张三&#x27; as string&#125;,</span><br><span class="line">  &#123;name: &#x27;李四&#x27; as string&#125;,</span><br><span class="line">  &#123;name: &#x27;王五&#x27; as string&#125;,</span><br><span class="line">  &#123;name: &#x27;赵六&#x27; as string&#125;,</span><br><span class="line">])</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;!------上面父，下面子--------&gt;</span><br><span class="line"></span><br><span class="line">&lt;!--子组件--&gt;</span><br><span class="line">&lt;template&gt;</span><br><span class="line">&#123;&#123; props.msg&#125;&#125;</span><br><span class="line">&#123;&#123; props.count&#125;&#125;</span><br><span class="line">  &lt;div v-for=&quot;(item,index) in props.userList&quot; :key=&quot;index&quot;&gt;</span><br><span class="line">    &#123;&#123;item.name&#125;&#125;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script setup lang=&quot;ts&quot;&gt;</span><br><span class="line">import &#123;defineProps&#125; from &quot;vue&quot;;</span><br><span class="line"></span><br><span class="line">interface Props &#123;</span><br><span class="line">  msg: String,</span><br><span class="line">  count: Number,</span><br><span class="line">  userList: Array&lt;String&gt;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">const props = defineProps&lt;Props&gt;()</span><br><span class="line"></span><br><span class="line">&lt;/script&gt;</span><br></pre>
+
+<p>withDefaults</p>
+<p>类似于Java中的Optional可选类中的ofNullable方法，可以设置默认值</p>
+<pre class="highlight"><span class="line">&lt;script setup lang=&quot;ts&quot;&gt;</span><br><span class="line">import &#123;defineProps,withDefaults&#125; from &quot;vue&quot;;</span><br><span class="line"></span><br><span class="line">interface Props &#123;</span><br><span class="line">  msg: String,</span><br><span class="line">  count: Number,</span><br><span class="line">  userList: Array&lt;String&gt;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// const props = defineProps&lt;Props&gt;()</span><br><span class="line">const props = withDefaults(defineProps&lt;Props&gt;(),&#123;</span><br><span class="line">  msg: () =&gt; &#x27;&#x27;,</span><br><span class="line">  count: () =&gt; 0,</span><br><span class="line">  userList: () =&gt; []</span><br><span class="line">&#125;)</span><br></pre>
+
+<h3 id="十三、全局事件总线"><a href="#十三、全局事件总线" class="headerlink" title="十三、全局事件总线"></a>十三、全局事件总线</h3><h4 id="1-下载"><a href="#1-下载" class="headerlink" title="1.下载"></a>1.下载</h4><pre class="highlight"><span class="line">npm i --save mitt</span><br></pre>
+
+<h4 id="2-创建bus-js"><a href="#2-创建bus-js" class="headerlink" title="2.创建bus.js"></a>2.创建bus.js</h4><p>在src&#x2F;util&#x2F;目录下创建bus.js</p>
+<pre class="highlight"><span class="line"><span class="keyword">import</span> mitt <span class="keyword">from</span> <span class="string">&#x27;mitt&#x27;</span></span><br><span class="line"><span class="keyword">const</span> bus = <span class="title function_">mitt</span>()</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> bus</span><br></pre>
+
+<h4 id="3-使用"><a href="#3-使用" class="headerlink" title="3.使用"></a>3.使用</h4><ul>
+<li>提供数据方</li>
+</ul>
+<pre class="highlight"><span class="line">import bus from <span class="string">&quot;../util/bus.js&quot;</span>;</span><br><span class="line"></span><br><span class="line">bus.emit(<span class="string">&#x27;getHeritageList&#x27;</span>,heritageStore.searchInputValue)</span><br></pre>
+
+<ul>
+<li>接收数据方</li>
+</ul>
+<pre class="highlight"><span class="line"><span class="keyword">import</span> bus <span class="keyword">from</span> <span class="string">&quot;../util/bus.js&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//挂载</span></span><br><span class="line"><span class="title function_">onMounted</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="title function_">changeConditionList</span>()</span><br><span class="line">  bus.<span class="title function_">on</span>(<span class="string">&#x27;getHeritageList&#x27;</span>,<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="title function_">initHeritageList</span>()</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)</span><br><span class="line"><span class="comment">//销毁之前</span></span><br><span class="line"><span class="title function_">onBeforeUnmount</span>( <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  bus.<span class="title function_">off</span>(<span class="string">&#x27;getHeritageList&#x27;</span>);</span><br><span class="line">&#125;)</span><br></pre>
+
+<h3 id="十四、给对象新增属性"><a href="#十四、给对象新增属性" class="headerlink" title="十四、给对象新增属性"></a>十四、给对象新增属性</h3><pre class="highlight"><span class="line"><span class="title class_">Reflect</span>.<span class="title function_">set</span>(目标对象, 属性名, 值)</span><br><span class="line"><span class="title class_">Reflect</span>.<span class="title function_">set</span>(val, <span class="string">&#x27;middle&#x27;</span>, middle)</span><br></pre>
+
+<h3 id="十五、Vue3路由打开新页面"><a href="#十五、Vue3路由打开新页面" class="headerlink" title="十五、Vue3路由打开新页面"></a>十五、Vue3路由打开新页面</h3><pre class="highlight"><span class="line"><span class="comment">// 跳转到贴吧</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">toPostBar</span> = (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> &#123;href&#125; = router.<span class="title function_">resolve</span>(&#123; <span class="comment">// router.resolve获取的是路由的全部信息，yong</span></span><br><span class="line">    <span class="attr">name</span>:<span class="string">&#x27;PostBar&#x27;</span></span><br><span class="line">  &#125;)</span><br><span class="line">  <span class="variable language_">window</span>.<span class="title function_">open</span>(href,<span class="string">&quot;_blank&quot;</span>)</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre>
+
+  </div>
+  <div>
+    
+      <div 
+        class="post-note note-warning copyright" 
+        style="margin-top: 42px">
+        <p>
+          <span style="font-weight: bold;">作者：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="/about">
+            theme-kaze
+          </a>
+        </p>
+        <p>
+          <span style="font-weight: bold;">文章链接：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="http://example.com/2023/03/19/Vue3%E5%AE%9E%E8%B7%B5/">
+            http://example.com/2023/03/19/Vue3%E5%AE%9E%E8%B7%B5/
+          </a>
+        </p>
+        <p><span style="font-weight: bold;">版权声明：</span>本博客所有文章除特别声明外，均采用<a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0 协议</a>。转载请注明出处！</p>
+      </div>
+    
+  </div>
+</article>
+<div class="nav">
+  
+  
+    <div class="nav-item-next">
+      <a 
+        href="/2023/03/19/hello-world/" 
+        class="nav-link">
+        <div>
+          <div class="nav-label">下一篇</div>
+          
+            <div class="nav-title">Hello World </div>
+          
+        </div>
+        <i class="iconfont icon-right nav-next-icon"></i>
+      </a>
+    </div>
+  
+</div>
+
+<div 
+  class="card card-content toc-card" 
+  id="mobiletoc">
+  <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE"><span class="toc-text">一、创建项目</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E3%80%81Element-Plus"><span class="toc-text">二、Element-Plus</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E3%80%81VueRouter"><span class="toc-text">三、VueRouter</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9B%E3%80%81vue3-%E5%9B%BE%E6%A0%87%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-text">四、vue3-图标的使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%94%E3%80%81Vuex"><span class="toc-text">五、Vuex</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%AD%E3%80%81Mockjs"><span class="toc-text">六、Mockjs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%83%E3%80%81vite%E8%B7%A8%E5%9F%9F%E9%85%8D%E7%BD%AE"><span class="toc-text">七、vite跨域配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%AB%E3%80%81%E4%BA%8C%E6%AC%A1%E5%B0%81%E8%A3%85axios"><span class="toc-text">八、二次封装axios</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B9%9D%E3%80%81reactive%E7%9B%B4%E6%8E%A5%E8%B5%8B%E5%80%BC"><span class="toc-text">九、reactive直接赋值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%81%E3%80%81%E6%A8%A1%E6%80%81%E6%A1%86%E4%BF%AE%E6%94%B9%E6%95%B0%E6%8D%AE%E5%AF%BC%E8%87%B4%E9%A1%B5%E9%9D%A2%E6%95%B0%E6%8D%AE%E4%B9%9F%E4%BC%9A%E8%B7%9F%E7%9D%80%E4%BF%AE%E6%94%B9"><span class="toc-text">十、模态框修改数据导致页面数据也会跟着修改</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%81%E4%B8%80%E3%80%81Pinia"><span class="toc-text">十一、Pinia</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%81%E4%BA%8C%E3%80%81setup%E8%AF%AD%E6%B3%95%E7%B3%96%E2%80%93%E5%9F%BA%E6%9C%AC"><span class="toc-text">十二、setup语法糖–基本</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E7%88%B6%E4%BC%A0%E5%AD%90%E4%BC%A0%E5%8F%82%E2%80%93defineProps"><span class="toc-text">1.父传子传参–defineProps</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%81%E4%B8%89%E3%80%81%E5%85%A8%E5%B1%80%E4%BA%8B%E4%BB%B6%E6%80%BB%E7%BA%BF"><span class="toc-text">十三、全局事件总线</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E4%B8%8B%E8%BD%BD"><span class="toc-text">1.下载</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E5%88%9B%E5%BB%BAbus-js"><span class="toc-text">2.创建bus.js</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E4%BD%BF%E7%94%A8"><span class="toc-text">3.使用</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%81%E5%9B%9B%E3%80%81%E7%BB%99%E5%AF%B9%E8%B1%A1%E6%96%B0%E5%A2%9E%E5%B1%9E%E6%80%A7"><span class="toc-text">十四、给对象新增属性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%81%E4%BA%94%E3%80%81Vue3%E8%B7%AF%E7%94%B1%E6%89%93%E5%BC%80%E6%96%B0%E9%A1%B5%E9%9D%A2"><span class="toc-text">十五、Vue3路由打开新页面</span></a></li></ol>
+</div></main>
+            <aside class="left-column">
+              
+              <div class="card card-author">
+                
+  <img 
+    src="https://img.songhn.com/img/Y67gdd.png" 
+    class="author-img"
+    width="88"
+    height="88"
+    alt="author avatar">
+
+<p class="author-name">theme-kaze</p>
+<p class="author-description">designed by theme-kaze</p>
+<div class="author-message">
+  <a 
+    class="author-posts-count" 
+    href="/archives">
+    <span>2</span>
+    <span>文章</span>
+  </a>
+  <a 
+    class="author-categories-count" 
+    href="/categories">
+    <span>0</span>
+    <span>分类</span>
+  </a>
+  <a 
+    class="author-tags-count" 
+    href="/tags">
+    <span>0</span>
+    <span>标签</span>
+  </a>
+</div>
+
+              </div>
+               <div class="sticky-tablet">
+  
+  
+    <article class="display-when-two-columns spacer">
+      <div class="card card-content toc-card">
+        <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE"><span class="toc-text">一、创建项目</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E3%80%81Element-Plus"><span class="toc-text">二、Element-Plus</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E3%80%81VueRouter"><span class="toc-text">三、VueRouter</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9B%E3%80%81vue3-%E5%9B%BE%E6%A0%87%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-text">四、vue3-图标的使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%94%E3%80%81Vuex"><span class="toc-text">五、Vuex</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%AD%E3%80%81Mockjs"><span class="toc-text">六、Mockjs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%83%E3%80%81vite%E8%B7%A8%E5%9F%9F%E9%85%8D%E7%BD%AE"><span class="toc-text">七、vite跨域配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%AB%E3%80%81%E4%BA%8C%E6%AC%A1%E5%B0%81%E8%A3%85axios"><span class="toc-text">八、二次封装axios</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B9%9D%E3%80%81reactive%E7%9B%B4%E6%8E%A5%E8%B5%8B%E5%80%BC"><span class="toc-text">九、reactive直接赋值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%81%E3%80%81%E6%A8%A1%E6%80%81%E6%A1%86%E4%BF%AE%E6%94%B9%E6%95%B0%E6%8D%AE%E5%AF%BC%E8%87%B4%E9%A1%B5%E9%9D%A2%E6%95%B0%E6%8D%AE%E4%B9%9F%E4%BC%9A%E8%B7%9F%E7%9D%80%E4%BF%AE%E6%94%B9"><span class="toc-text">十、模态框修改数据导致页面数据也会跟着修改</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%81%E4%B8%80%E3%80%81Pinia"><span class="toc-text">十一、Pinia</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%81%E4%BA%8C%E3%80%81setup%E8%AF%AD%E6%B3%95%E7%B3%96%E2%80%93%E5%9F%BA%E6%9C%AC"><span class="toc-text">十二、setup语法糖–基本</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E7%88%B6%E4%BC%A0%E5%AD%90%E4%BC%A0%E5%8F%82%E2%80%93defineProps"><span class="toc-text">1.父传子传参–defineProps</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%81%E4%B8%89%E3%80%81%E5%85%A8%E5%B1%80%E4%BA%8B%E4%BB%B6%E6%80%BB%E7%BA%BF"><span class="toc-text">十三、全局事件总线</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E4%B8%8B%E8%BD%BD"><span class="toc-text">1.下载</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E5%88%9B%E5%BB%BAbus-js"><span class="toc-text">2.创建bus.js</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E4%BD%BF%E7%94%A8"><span class="toc-text">3.使用</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%81%E5%9B%9B%E3%80%81%E7%BB%99%E5%AF%B9%E8%B1%A1%E6%96%B0%E5%A2%9E%E5%B1%9E%E6%80%A7"><span class="toc-text">十四、给对象新增属性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%81%E4%BA%94%E3%80%81Vue3%E8%B7%AF%E7%94%B1%E6%89%93%E5%BC%80%E6%96%B0%E9%A1%B5%E9%9D%A2"><span class="toc-text">十五、Vue3路由打开新页面</span></a></li></ol>
+      </div>
+    </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header">
+    <i 
+      class="iconfont icon-fenlei" 
+      style="padding-right: 2px;">
+    </i>分类
+  </div>
+  <div class="categories-list">
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header">
+    <i 
+      class="iconfont icon-biaoqian" 
+      style="padding-right: 2px;">
+    </i>热门标签
+  </div>
+  <div class="tags-list">
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+            <aside class="right-column">
+              <div class="sticky-widescreen">
+  
+  
+    <article class="card card-content toc-card">
+      <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE"><span class="toc-text">一、创建项目</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E3%80%81Element-Plus"><span class="toc-text">二、Element-Plus</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E3%80%81VueRouter"><span class="toc-text">三、VueRouter</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9B%E3%80%81vue3-%E5%9B%BE%E6%A0%87%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-text">四、vue3-图标的使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%94%E3%80%81Vuex"><span class="toc-text">五、Vuex</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%AD%E3%80%81Mockjs"><span class="toc-text">六、Mockjs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%83%E3%80%81vite%E8%B7%A8%E5%9F%9F%E9%85%8D%E7%BD%AE"><span class="toc-text">七、vite跨域配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%AB%E3%80%81%E4%BA%8C%E6%AC%A1%E5%B0%81%E8%A3%85axios"><span class="toc-text">八、二次封装axios</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B9%9D%E3%80%81reactive%E7%9B%B4%E6%8E%A5%E8%B5%8B%E5%80%BC"><span class="toc-text">九、reactive直接赋值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%81%E3%80%81%E6%A8%A1%E6%80%81%E6%A1%86%E4%BF%AE%E6%94%B9%E6%95%B0%E6%8D%AE%E5%AF%BC%E8%87%B4%E9%A1%B5%E9%9D%A2%E6%95%B0%E6%8D%AE%E4%B9%9F%E4%BC%9A%E8%B7%9F%E7%9D%80%E4%BF%AE%E6%94%B9"><span class="toc-text">十、模态框修改数据导致页面数据也会跟着修改</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%81%E4%B8%80%E3%80%81Pinia"><span class="toc-text">十一、Pinia</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%81%E4%BA%8C%E3%80%81setup%E8%AF%AD%E6%B3%95%E7%B3%96%E2%80%93%E5%9F%BA%E6%9C%AC"><span class="toc-text">十二、setup语法糖–基本</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E7%88%B6%E4%BC%A0%E5%AD%90%E4%BC%A0%E5%8F%82%E2%80%93defineProps"><span class="toc-text">1.父传子传参–defineProps</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%81%E4%B8%89%E3%80%81%E5%85%A8%E5%B1%80%E4%BA%8B%E4%BB%B6%E6%80%BB%E7%BA%BF"><span class="toc-text">十三、全局事件总线</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E4%B8%8B%E8%BD%BD"><span class="toc-text">1.下载</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E5%88%9B%E5%BB%BAbus-js"><span class="toc-text">2.创建bus.js</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E4%BD%BF%E7%94%A8"><span class="toc-text">3.使用</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%81%E5%9B%9B%E3%80%81%E7%BB%99%E5%AF%B9%E8%B1%A1%E6%96%B0%E5%A2%9E%E5%B1%9E%E6%80%A7"><span class="toc-text">十四、给对象新增属性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%81%E4%BA%94%E3%80%81Vue3%E8%B7%AF%E7%94%B1%E6%89%93%E5%BC%80%E6%96%B0%E9%A1%B5%E9%9D%A2"><span class="toc-text">十五、Vue3路由打开新页面</span></a></li></ol>
+    </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header">
+    <i 
+      class="iconfont icon-wenzhang_huaban" 
+      style="padding-right: 2px;">
+    </i>最近文章
+  </div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2023-03-19</div>
+        <a href="/2023/03/19/Vue3%E5%AE%9E%E8%B7%B5/"><div class="recent-posts-item-content">Vue3实践</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2023-03-19</div>
+        <a href="/2023/03/19/hello-world/"><div class="recent-posts-item-content">Hello World</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+     
+    <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>
+          Copyright ©
+          
+            2020
+          
+          
+                - 
+                2023
+          
+        </span>
+        &nbsp;
+        <a 
+          href="/" 
+          class="footer-link">
+          Theme Kaze
+        </a>
+      </div>
+    </div>
+
+    
+      <div class="footer-dsc">
+        
+          Powered by
+          <a 
+            href="https://hexo.io/" 
+            class="footer-link" 
+            target="_blank" 
+            rel="nofollow noopener noreferrer">
+            &nbsp;Hexo
+          </a>
+        
+        
+          <span>&nbsp;|&nbsp;</span>
+        
+        
+          Theme -
+          <a 
+            href="https://github.com/theme-kaze" 
+            class="footer-link" 
+            target="_blank"
+            rel="nofollow noopener noreferrer">
+            &nbsp;Kaze
+          </a>
+        
+      </div>
+    
+    
+    
+    
+</footer>
+ 
+    
+  <a 
+    role="button" 
+    id="scrollbutton" 
+    class="basebutton" 
+    aria-label="回到顶部">
+    <i class="iconfont icon-arrowleft button-icon"></i>
+  </a>
+
+<a 
+  role="button" 
+  id="menubutton"
+  aria-label="menu button"
+  class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="popbutton" 
+  class="basebutton" 
+  aria-label="控制中心">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="darkbutton" 
+  class="basebutton darkwidget" 
+  aria-label="夜色模式">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="searchbutton" 
+  class="basebutton searchwidget" 
+  aria-label="搜索">
+  <i class="iconfont icon-search button-icon"></i>
+</a> 
+     
+     
+     
+      <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img')
+    var i
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a')
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'))
+      wrapper.setAttribute('aria-label', 'illustration')
+      wrapper.style.cssText =
+        'width: 100%; display: flex; justify-content: center;'
+      if (img[i].alt) wrapper.dataset.caption = img[i].alt
+      wrapper.dataset.nolink = true
+      img[i].before(wrapper)
+      wrapper.append(img[i])
+      var divWrap = document.createElement('div')
+      divWrap.classList.add('gallery')
+      wrapper.before(divWrap)
+      divWrap.append(wrapper)
+    }
+    baguetteBox.run('.gallery')
+  }
+</script>
+<script>
+  loadScript(
+    "/js/lib/lightbox/baguetteBox.min.js",
+    addImgLayout
+  )
+</script>
+ 
+     
+     
+    <script src="/js/main.js"></script> 
+     
+    
+      <script>
+        var addLazyload = function () {
+          var observer = lozad('.lozad', {
+            load: function (el) {
+              el.srcset = el.getAttribute('data-src')
+            },
+            loaded: function (el) {
+              el.classList.add('loaded')
+            },
+          })
+          observer.observe()
+        }
+      </script>
+      <script>
+        loadScript('/js/lib/lozad.min.js', addLazyload)
+      </script>
+     
+    
+    
+  </body>
+</html>
